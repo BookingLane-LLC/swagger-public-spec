@@ -1,15 +1,9 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "BookingLane API v2",
-    "description": "BookingLane REST API v2",
+    "title": "Reservation Status API",
     "version": "v2"
   },
-  "servers": [
-    {
-      "url": "https://api.example.com"
-    }
-  ],
   "paths": {
     "/api/ai-agent-reservations/status": {
       "get": {
@@ -19,41 +13,30 @@
           {
             "name": "reservationId",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
-            },
-            "required": true
-          },
-          {
-            "name": "api-Version",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            },
-            "required": false
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Reservation found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ReservationStatusResponse"
+                  "$ref": "#/components/schemas/StatusMessage"
                 }
               }
             }
           },
           "404": {
-            "description": "Not Found",
+            "description": "Reservation not found",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
+                  "$ref": "#/components/schemas/StatusMessage"
                 }
               }
             }
@@ -64,13 +47,15 @@
   },
   "components": {
     "schemas": {
-      "ReservationStatusResponse": {
+      "StatusMessage": {
         "type": "object",
         "properties": {
-          "reservationId": { "type": "integer" },
-          "status": { "type": "string" }
+          "message": {
+            "type": "string",
+            "example": "Reservation 123 for John is Confirmed and scheduled for 3:00 PM on July 1."
+          }
         },
-        "required": ["reservationId", "status"]
+        "required": ["message"]
       }
     }
   }
